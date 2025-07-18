@@ -13,12 +13,13 @@
     dest: "{{ lighthouse_dest }}"
     update: yes
 
-- name: Create symlink for nginx config
-  file:
-    src: "{{ lighthouse_dest }}/nginx/lighthouse.conf"
+- name: Copy nginx config for LightHouse
+  copy:
+    src: lighthouse.conf
     dest: /etc/nginx/sites-enabled/lighthouse.conf
-    state: link
-    force: true
+    owner: root
+    group: root
+    mode: 0644
   become: true
 
 - name: Restart nginx
