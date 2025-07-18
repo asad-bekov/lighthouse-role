@@ -1,0 +1,28 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - git
+      - nginx
+    state: present
+  become: true
+
+- name: Clone LightHouse repo
+  git:
+    repo: "{{ lighthouse_repo }}"
+    dest: "{{ lighthouse_dest }}"
+    update: yes
+
+- name: Create symlink for nginx config
+  file:
+    src: "{{ lighthouse_dest }}/nginx/lighthouse.conf"
+    dest: /etc/nginx/sites-enabled/lighthouse.conf
+    state: link
+    force: true
+  become: true
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: true
